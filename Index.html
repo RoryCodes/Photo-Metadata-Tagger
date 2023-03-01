@@ -1,0 +1,690 @@
+<!-- 
+
+*********************************************************************
+* CHECK OUT MORE AUTOTOOLS WEB SCREENS AT: 						    *
+* https://www.RoryCodes.com/material-design-autotools-web-screen/   *
+*																    *
+*********************************************************************
+
+FEATURES:
+1) Material Design Lite styling and animation
+
+
+LINKS:
+https://getmdl.io/components/index.html
+https://github.com/joaomgcd/AutoToolsWebScreens/blob/master/autotoolsfunctions.js
+http://www.jsoneditoronline.org/#
+http://leifoolsen.github.io/mdl-ext/demo/color-themes.html
+https://www.zashcolors.com/mdl-css-color-classes.php
+
+-->
+
+<head>
+	<meta name="autotoolswebscreen" type="variablejs" id="PHOTO_METADATA_PROJECTS" label="Photo Metadata Tags JSON" description="JSON of possible tags" defaultValue='[{"name":"OOPS","tagStructure":[{"type":"location","tags":["Electrical Room","Outside","WRP"]},{"type":"work_type","tags":["Concrete","Steel","Electrical","Demolition"]},{"type":"specific_location","tags":["Generator","MCC"]},{"type":"extra","tags":["T&M","Change Order"]}]},{"name":"Grit Chamber","tagStructure":[{"type":"location","tags":["Grit Chamber","WRP"]},{"type":"work_type","tags":["Concrete","Layout","Mechanical","Demolition","Bypass"]},{"type":"specific_location","tags":["Channel","Basin","Walkway"]},{"type":"extra","tags":["T&M","Change Order"]}]},{"name":"EPS","tagStructure":[{"type":"location","tags":["EPS","WRP"]},{"type":"work_type","tags":["Concrete","Steel","Layout","Mechanical","Electrical","Demolition","Bypass"]},{"type":"specific_location","tags":["Grade Floor","Lower Floor"]},{"type":"extra","tags":["T&M","Change Order"]}]},{"name":"R-2","tagStructure":[{"type":"location","tags":["R-2","P-1"]},{"type":"work_type","tags":["Demolition","Coating"]},{"type":"specific_location","tags":["Walls","Top"]},{"type":"extra","tags":["T&M","Change Order"]}]},{"name":"Aeration Basin","tagStructure":[{"type":"location","tags":["Aeration Basin","WRP"]},{"type":"work_type","tags":["Concrete","Layout","Mechanical","Demolition"]},{"type":"specific_location","tags":["Basin 1-A","Basin 1-B","Basin 1-C"]},{"type":"extra","tags":["T&M","Change Order"]}]}]' />
+	<meta name="autotoolswebscreen" type="variablejs" id="IS_TAGGING" label="Tagging Boolean" description="Boolean variable to verify if the user is tagging a photo or performing modifications to tags. Shall be true or false.  If variable input is not Boolean, default is true." defaultValue='true' />
+	<meta name="autotoolswebscreen" type="variablejs" id="PHOTO" label="Photo" description="Photo being tagged" defaultValue='https://eltorowater.wpengine.com/wp-content/uploads/2014/12/el-toro-logo.png' />
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-red.min.css" />
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <meta name="viewport" content="width=device-width, height=device-height,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<script>
+</head>
+<style>
+	.fit-width.mdl-card {
+		width: auto;
+		min-height: auto;
+	}
+
+	.fit-width.mdl-card__title-text {
+		padding-right: 110px;
+	}
+
+	.fit-width.mdl-checkbox {
+		height: auto;
+	}
+</style>
+<body>
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--no-drawer-button">
+		<header class="mdl-layout__header">
+			<!-- Title Section-->
+			<div class="mdl-layout__header-row">
+				<span class="mdl-layout-title">Photo Metadata Tagger</span>
+				<div class="mdl-layout-spacer"></div>
+				<button class="mdl-button mdl-js-button mdl-button--icon" id="button-confirm" onclick="confirmTags()">
+					<i class="material-icons">check</i>
+				</button>
+			</div>
+			<!-- Project Section -->
+			<div class="mdl-layout__header-row mdl-js-ripple-effect">
+				<span class="mdl-layout-title" id="tab-bar-current-project">[PROJECT]</span>
+				<div class="mdl-layout-spacer"></div>
+				<button class="mdl-button mdl-js-button mdl-button--icon" id="addProject" onclick="openProjectDialog(this.id)">
+					<i class="material-icons">add</i>
+				</button>
+				<button class="mdl-button mdl-js-button mdl-button--icon" id="editProject" onclick="openProjectDialog(this.id)">
+					<i class="material-icons">edit</i>
+				</button>
+				<button class="mdl-button mdl-js-button mdl-button--icon" id="deleteProject" onclick="openProjectDialog(this.id)">
+					<i class="material-icons">delete</i>
+				</button>
+				<button class="mdl-button mdl-js-button mdl-button--icon" id="changeProject" onclick="openProjectDialog(this.id)">
+					<i class="material-icons">engineering</i>
+				</button>
+			</div>
+		</header>
+		<main class="mdl-layout__content">
+			<div class="page-content">
+				<div class="mdl-grid mdl-color--grey-50">
+					<!-- Photo Section -->
+					<div class="mdl-cell mdl-cell--12-col">
+						<div class="fit-width mdl-card mdl-shadow--4dp">
+							<div class="mdl-card__title">
+								<img src="https://eltorowater.wpengine.com/wp-content/uploads/2014/12/el-toro-logo.png" width="100%" height="auto">
+							</div>
+						</div>
+					</div>
+					<!-- Location Tag Section -->
+					<div class="mdl-cell mdl-cell--12-col">
+						<div class="fit-width mdl-card mdl-shadow--4dp">
+							<div class="mdl-card__menu">
+								<button class="mdl-button mdl-js-button mdl-button--icon" id="add" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)">
+									<i class="material-icons mdl-color-text--white">add</i>
+								</button>
+								<button class="mdl-button mdl-js-button mdl-button--icon" id="edit" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)">
+									<i class="material-icons mdl-color-text--white">edit</i>
+								</button>
+								<button class="mdl-button mdl-js-button mdl-button--icon" id="delete" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)">
+									<i class="material-icons mdl-color-text--white">delete</i>
+								</button>
+							</div>
+							<div class="mdl-card__title mdl-color--primary">
+								<h2 class="fit-width mdl-card__title-text mdl-color-text--white">Location</h2>
+							</div>
+							<div class="mdl-card__supporting-text" id="checkbox_group-location">
+							</div>
+						</div>
+					</div>
+					<!-- Work Type Tag Section -->
+					<div class="mdl-cell mdl-cell--12-col">
+						<div class="fit-width mdl-card mdl-shadow--4dp">
+							<div class="mdl-card__menu">
+								<button class="mdl-button mdl-js-button mdl-button--icon" id="add" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)">
+									<i class="material-icons mdl-color-text--white">add</i>
+								</button>
+								<button class="mdl-button mdl-js-button mdl-button--icon" id="edit" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)">
+									<i class="material-icons mdl-color-text--white">edit</i>
+								</button>
+								<button class="mdl-button mdl-js-button mdl-button--icon" id="delete" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)">
+									<i class="material-icons mdl-color-text--white">delete</i>
+								</button>
+							</div>
+							<div class="mdl-card__title mdl-color--primary">
+								<h2 class="fit-width mdl-card__title-text mdl-color-text--white">Work Type</h2>
+							</div>
+							<div class="mdl-card__supporting-text" id="checkbox_group-work_type">
+							</div>
+						</div>
+					</div>
+					<!-- Specific Location Tag Section -->
+					<div class="mdl-cell mdl-cell--12-col">
+						<div class="fit-width mdl-card mdl-shadow--4dp">
+							<div class="mdl-card__menu">
+								<button class="mdl-button mdl-js-button mdl-button--icon" id="add" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)">
+									<i class="material-icons mdl-color-text--white">add</i>
+								</button>
+								<button class="mdl-button mdl-js-button mdl-button--icon" id="edit" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)">
+									<i class="material-icons mdl-color-text--white">edit</i>
+								</button>
+								<button class="mdl-button mdl-js-button mdl-button--icon" id="delete" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)">
+									<i class="material-icons mdl-color-text--white">delete</i>
+								</button>
+							</div>
+							<div class="mdl-card__title mdl-color--primary">
+								<h2 class="fit-width mdl-card__title-text mdl-color-text--white">Specific Location</h2>
+							</div>
+							<div class="mdl-card__supporting-text" id="checkbox_group-specific_location">
+							</div>
+						</div>
+					</div>
+					<!-- Extra Tag Section -->
+					<div class="mdl-cell mdl-cell--12-col">
+						<div class="fit-width mdl-card mdl-shadow--4dp">
+							<div class="mdl-card__menu">
+								<button class="mdl-button mdl-js-button mdl-button--icon" name="add-extra" id="add" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)" disabled>
+									<i class="material-icons mdl-color-text--white">add</i>
+								</button>
+								<button class="mdl-button mdl-js-button mdl-button--icon" name="edit-extra" id="edit" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)" disabled>
+									<i class="material-icons mdl-color-text--white">edit</i>
+								</button>
+								<button class="mdl-button mdl-js-button mdl-button--icon" name="delete-extra" id="delete" onclick="tagModifications(this.parentElement.nextElementSibling.firstElementChild.innerText, this.id)" disabled>
+									<i class="material-icons mdl-color-text--white">delete</i>
+								</button>
+							</div>
+							<div class="mdl-card__title mdl-color--primary">
+								<h2 class="mdl-card__title-text mdl-color-text--white">Extra</h2>
+							</div>
+							<div class="fit-width mdl-card__supporting-text">
+								<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-extra">
+									<input type="checkbox" id="switch-extra" class="mdl-switch__input" onclick="toggleAppendExtraTags()">
+									<span class="mdl-switch__label"></span>
+								</label>
+							</div>
+							<div class="fit-width mdl-card__supporting-text" id="checkbox_group-extra">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		<dialog class="mdl-dialog" id='dialog-tag'>
+			<h4 class="mdl-dialog__title" style="font-size:1.8rem" id="dialog-tag-title">[DIALOG]</h4>
+			<div class="mdl-dialog__content">
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+					<input class="mdl-textfield__input" type="text" id="dialog-tag-input-item">
+					<label class="mdl-textfield__label" id="dialog-tag-input-label">???</label>
+				</div>
+			</div>
+			<div class='mdl-dialog__actions'>
+				<button type="button" class="mdl-button" id="dialog-tag-button-right" onclick="dialogTagAction(this.innerText)">[BUTTON_RIGHT]</button>
+				<button type="button" class="mdl-button" id="dialog-tag-button-left" onclick="dialogTagAction(this.innerText)">CANCEL</button>
+			</div>
+		</dialog>
+		<dialog class="mdl-dialog" id='dialog-project-change'>
+			<h4 class="mdl-dialog__title" style="font-size:1.8rem" id="dialog-project-change-title">[DIALOG]</h4>
+			<div class="mdl-dialog__content" id="dialog-project-change-content">
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+					<input class="mdl-textfield__input" type="text" id="dialog-project-change-input-item">
+					<label class="mdl-textfield__label" id="dialog-project-change-input-label">???</label>
+				</div>
+			</div>
+			<div class='mdl-dialog__actions'>
+				<button type="button" class="mdl-button" id="dialog-project-change-button-right" onclick="dialogProjectAction(this.innerText, 'dialog-project-change')">[BUTTON_RIGHT]</button>
+				<button type="button" class="mdl-button" id="dialog-project-change-button-left" onclick="dialogProjectAction(this.innerText, 'dialog-project-change')">CANCEL</button>
+			</div>
+		</dialog>
+		<dialog class="mdl-dialog" id='dialog-project-add_edit_del'>
+			<h4 class="mdl-dialog__title" style="font-size:1.8rem" id="dialog-project-add_edit_del-title">[DIALOG]</h4>
+			<div class="mdl-dialog__content" id="dialog-project-add_edit_del-content">
+				<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+					<input class="mdl-textfield__input" type="text" id="dialog-project-add_edit_del-input-item">
+					<label class="mdl-textfield__label" id="dialog-project-add_edit_del-input-label">Project Name</label>
+				</div>
+			</div>
+			<div class='mdl-dialog__actions'>
+				<button type="button" class="mdl-button" id="dialog-project-add_edit_del-button-right" onclick="dialogProjectAction(this.innerText, 'dialog-project-add_edit_del')">[BUTTON_RIGHT]</button>
+				<button type="button" class="mdl-button" id="dialog-project-add_edit_del-button-left" onclick="dialogProjectAction(this.innerText, 'dialog-project-add_edit_del')">CANCEL</button>
+			</div>
+		</dialog>
+	</div>
+</body>
+<script>
+	AutoTools.setDefaultValues({
+		"PHOTO_METADATA_PROJECTS": '[{"name":"OOPS","tagStructure":[{"type":"location","tags":["Electrical Room","Outside","WRP"]},{"type":"work_type","tags":["Concrete","Steel","Electrical","Demolition"]},{"type":"specific_location","tags":["Generator","MCC"]},{"type":"extra","tags":["T&M","Change Order"]}]},{"name":"Grit Chamber","tagStructure":[{"type":"location","tags":["Grit Chamber","WRP"]},{"type":"work_type","tags":["Concrete","Layout","Mechanical","Demolition","Bypass"]},{"type":"specific_location","tags":["Channel","Basin","Walkway"]},{"type":"extra","tags":["T&M","Change Order"]}]},{"name":"EPS","tagStructure":[{"type":"location","tags":["EPS","WRP"]},{"type":"work_type","tags":["Concrete","Steel","Layout","Mechanical","Electrical","Demolition","Bypass"]},{"type":"specific_location","tags":["Grade Floor","Lower Floor"]},{"type":"extra","tags":["T&M","Change Order"]}]},{"name":"R-2","tagStructure":[{"type":"location","tags":["R-2","P-1"]},{"type":"work_type","tags":["Demolition","Coating"]},{"type":"specific_location","tags":["Walls","Top"]},{"type":"extra","tags":["T&M","Change Order"]}]},{"name":"Aeration Basin","tagStructure":[{"type":"location","tags":["Aeration Basin","WRP"]},{"type":"work_type","tags":["Concrete","Layout","Mechanical","Demolition"]},{"type":"specific_location","tags":["Basin 1-A","Basin 1-B","Basin 1-C"]},{"type":"extra","tags":["T&M","Change Order"]}]}]',
+		"IS_TAGGING": true,
+		"PHOTO": "https://eltorowater.wpengine.com/wp-content/uploads/2014/12/el-toro-logo.png",
+	});
+	const PROJECTS = JSON.parse(PHOTO_METADATA_PROJECTS);
+	if (typeof(IS_TAGGING) != "boolean") {
+		console.debug('IS_TAGGING var was not type Boolean')
+		IS_TAGGING = true;
+	};
+	const TEXT = {
+		PROJECT: document.getElementById("checkbox_group-project"),
+		LOCATION: document.getElementById("checkbox_group-location"),
+		WORK_TYPE: document.getElementById("checkbox_group-work_type"),
+		SPECIFIC_LOCATION: document.getElementById("checkbox_group-specific_location"),
+		EXTRA: document.getElementById("checkbox_group-extra")
+	}
+	const DIALOG = {
+		TAG: {
+			DIA: document.getElementById('dialog-tag'),
+			BTN_RIGHT: document.getElementById('dialog-tag-button-right'),
+			BTN_LEFT: document.getElementById('dialog-tag-button-left'),
+			INPUT: document.getElementById('dialog-tag-input-item'),
+			LABEL: document.getElementById('dialog-tag-input-label'),
+			TITLE: document.getElementById('dialog-tag-title')
+		},
+		PROJECT: {
+			CHANGE: {
+				DIA: document.getElementById('dialog-project-change'),
+				CONTENT: document.getElementById('dialog-project-change-content'),
+				BTN_RIGHT: document.getElementById('dialog-project-change-button-right'),
+				BTN_LEFT: document.getElementById('dialog-project-change-button-left'),
+				INPUT: document.getElementById('dialog-project-change-input-item'),
+				LABEL: document.getElementById('dialog-project-change-input-label'),
+				TITLE: document.getElementById('dialog-project-change-title')
+			},
+			ADD_EDIT_DEL: {
+				DIA: document.getElementById('dialog-project-add_edit_del'),
+				CONTENT: document.getElementById('dialog-project-add_edit_del-content'),
+				BTN_RIGHT: document.getElementById('dialog-project-add_edit_del-button-right'),
+				BTN_LEFT: document.getElementById('dialog-project-add_edit_del-button-left'),
+				INPUT: document.getElementById('dialog-project-add_edit_del-input-item'),
+				LABEL: document.getElementById('dialog-project-add_edit_del-input-label'),
+				TITLE: document.getElementById('dialog-project-add_edit_del-title')
+			}
+		}
+	}
+	const TAB_BAR_PROJECT_NAME = document.getElementById("tab-bar-current-project");
+	const COMMAND_PREFIX = "Photo Metadata Tagger";
+	const SWITCH_EXTRA = document.getElementById("switch-extra");
+	const skeletonProject = {
+		"name": "newProject",
+		"tagStructure": [{
+				"type": "location",
+				"tags": []
+			},
+			{
+				"type": "work_type",
+				"tags": []
+			},
+			{
+				"type": "specific_location",
+				"tags": []
+			},
+			{
+				"type": "extra",
+				"tags": [
+					"T&M",
+					"Change Order"
+				]
+			}
+		]
+	}
+	init(PROJECTS[0].name)
+	/**
+		* initializes project and cards
+		* 
+		* @param {string} projectName - project name
+		*/
+	function init(projectName) {
+		TAB_BAR_PROJECT_NAME.innerText = projectName;
+		fillCardWithCheckBoxes(TEXT.LOCATION, "location", projectName, false);
+		fillCardWithCheckBoxes(TEXT.WORK_TYPE, "work_type", projectName, false);
+		fillCardWithCheckBoxes(TEXT.SPECIFIC_LOCATION, "specific_location", projectName, false);
+		fillCardWithCheckBoxes(TEXT.EXTRA, "extra", projectName, true);
+		SWITCH_EXTRA.parentElement.classList.remove("is-checked");
+		SWITCH_EXTRA.checked = false;
+	}
+	/**
+		* creates check boxes for a card
+		* 
+		* @param {Element} card - DOM element of card
+		* @param {string} cardName - name of the card header
+		* @param {string} projectName - project name
+		* @param {boolean} disabled - boolean for disabling/enabling checkbox
+		*/
+	function fillCardWithCheckBoxes(card, cardName, projectName, disabled) {
+		// removes current children
+		while (card.hasChildNodes()) {
+			card.removeChild(card.firstChild);
+		};
+		// get tags from projects array
+		let tags = getTagStructure(projectName, cardName)
+		// creates tags and appends to card
+		tags.forEach(tag => {
+			// text node
+			let text_tag = document.createTextNode(tag);
+			// span node
+			let span = document.createElement("span");
+			span.className = "mdl-checkbox__label";
+			span.appendChild(text_tag);
+			componentHandler.upgradeElement(span);
+			// input node
+			let input = document.createElement("input");
+			input.setAttribute("type", "checkbox");
+			input.className = "mdl-checkbox__input";
+			input.id = cardName + "-" + tag;
+			input.setAttribute("name", cardName);
+			if (disabled) {
+				input.disabled = true
+			};
+			componentHandler.upgradeElement(input);
+			// label node
+			let label = document.createElement("label");
+			label.className = "fit-width mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect";
+			label.setAttribute("for", cardName + "-" + tag);
+			label.appendChild(input);
+			label.appendChild(span);
+			componentHandler.upgradeElement(label);
+			// add to card with line break
+			card.appendChild(label);
+			card.appendChild(document.createElement("br"))
+		})
+	};
+	/**
+		* returns tagStructure tag array
+		* 
+		* @param {string} projectName - project name
+		* @param {string} tagStructureType - tagStructure type
+		*/
+	function getTagStructure(projectName, tagStructureType) {
+		let project = PROJECTS.find(p => p.name == projectName)
+		let tags = project.tagStructure.find(t => t.type == tagStructureType).tags
+		return tags
+	};
+	/**
+		* toggles use of "Extra" check boxes for use
+		*/
+	function toggleAppendExtraTags() {
+		// get refs to all tag btns
+		let addBtn = document.getElementsByName("add-extra");
+		let editBtn = document.getElementsByName("edit-extra");
+		let deleteBtn = document.getElementsByName("delete-extra");
+		// toggle disabled/enable of all tags based on switch
+		let tags = getTagStructure(TAB_BAR_PROJECT_NAME.innerHTML, "extra")
+		tags.forEach(t => {
+			let radioBtn = document.getElementById("extra-" + t);
+			if (SWITCH_EXTRA.checked) {
+				radioBtn.disabled = false;
+				radioBtn.parentElement.classList.remove("is-disabled");
+				addBtn[0].disabled = false;
+				editBtn[0].disabled = false;
+				deleteBtn[0].disabled = false;
+			} else {
+				radioBtn.disabled = true;
+				radioBtn.parentElement.classList.add("is-disabled");
+				addBtn[0].disabled = true;
+				editBtn[0].disabled = true;
+				deleteBtn[0].disabled = true;
+			};
+		})
+	};
+	/**
+		* sets and creates dialog when modifying a tag
+		* 
+		* @param {string} parentCardTitle - card header title
+		* @param {string} btnName - right button for dialog
+		*/
+	function tagModifications(parentCardTitle, btnName) {
+		// gets card title
+		let humanText = transformTextHumanToCode(transformTextCodePCToHuman(parentCardTitle));
+		let chkd = document.querySelectorAll('input[name=' + humanText + ']:checked');
+		console.log(humanText, chkd.length);
+		btnName = capitalizeFirstLetter(btnName);
+		if (chkd.length != 1 && (btnName.toUpperCase() == "EDIT" || btnName.toUpperCase() == "DELETE")) {
+			// sends error to Tasker 
+			console.log('error=:=check one tag only');
+			// AutoTools.sendCommand('error=:=only check one tag', COMMAND_PREFIX);
+			console.debug('check one tag only');
+			return;
+		};
+		// prepare dialog and show
+		if (btnName.toUpperCase() == "ADD") {
+			DIALOG.TAG.INPUT.value = "";
+			DIALOG.TAG.INPUT.removeAttribute('disabled');
+		} else if (btnName.toUpperCase() == "EDIT") {
+			let selectedRBtn = document.querySelector('input[name=' + humanText + ']:checked').nextElementSibling.innerText;
+			DIALOG.TAG.INPUT.removeAttribute('disabled');
+			DIALOG.TAG.INPUT.value = selectedRBtn;
+			DIALOG.TAG.INPUT.parentElement.classList.add("is-dirty");
+		} else if (btnName.toUpperCase() == "DELETE") {
+			let selectedRBtn = document.querySelector('input[name=' + humanText + ']:checked').nextElementSibling.innerText;
+			DIALOG.TAG.INPUT.value = selectedRBtn;
+			DIALOG.TAG.INPUT.parentElement.classList.add("is-dirty");
+			DIALOG.TAG.INPUT.setAttribute('disabled', true);
+		};
+		DIALOG.TAG.LABEL.innerText = parentCardTitle;
+		DIALOG.TAG.TITLE.innerText = btnName + " tag for: " + parentCardTitle;
+		DIALOG.TAG.BTN_RIGHT.innerText = btnName.toUpperCase();
+		DIALOG.TAG.DIA.showModal();
+	};
+	/**
+		* performs dialog tag actions (add/edit/delete) tag
+		* 
+		* @param {string} btn_text - right button for dialog
+		*/
+	function dialogTagAction(btn_text) {
+		let dialogTagType = DIALOG.TAG.TITLE.innerText.split(": ")[1].toLowerCase();
+		let cardName = transformTextHumanToCode(dialogTagType);
+		let card = document.getElementById('checkbox_group-' + cardName);
+		// if adding a tag to a card
+		if (btn_text == "ADD" && DIALOG.TAG.INPUT.value != "") {
+			let tags = getTagStructure(TAB_BAR_PROJECT_NAME.innerHTML, cardName)
+			// push new tag to array
+			tags.push(DIALOG.TAG.INPUT.value)
+			let newTagStruc = {
+				"type": cardName,
+				"tags": tags
+			}
+			// get index of project
+			let projIndex = PROJECTS.findIndex(p => p.name == TAB_BAR_PROJECT_NAME.innerHTML)
+			// get index of tagStructure
+			let tsIndex = PROJECTS[projIndex].tagStructure.findIndex(ts => ts.type == cardName)
+			PROJECTS[projIndex].tagStructure[tsIndex] = newTagStruc;
+			// redraws changes to card
+			fillCardWithCheckBoxes(card, cardName, TAB_BAR_PROJECT_NAME.innerHTML, false);
+			// sends JSON update to AutoTools 
+			sendATUpdate("added", DIALOG.TAG.INPUT.value, dialogTagType, TAB_BAR_PROJECT_NAME.innerHTML, true)
+			// if editing a tag on a card
+		} else if (btn_text == "EDIT" && DIALOG.TAG.INPUT.value != "") {
+			// get index of project
+			let projIndex = PROJECTS.findIndex(p => p.name == TAB_BAR_PROJECT_NAME.innerHTML)
+			// get index of tagStructure
+			let tsIndex = PROJECTS[projIndex].tagStructure.findIndex(ts => ts.type == cardName)
+			// get ref to original checked tag
+			let originalTag = document.querySelector('input[name=' + cardName + ']:checked').nextElementSibling.innerText;
+			// get index of tag
+			let tagIndex = PROJECTS[projIndex].tagStructure[tsIndex].tags.findIndex(t => t == originalTag)
+			// update tag
+			PROJECTS[projIndex].tagStructure[tsIndex].tags[tagIndex] = DIALOG.TAG.INPUT.value
+			// redraws changes to card
+			fillCardWithCheckBoxes(card, cardName, TAB_BAR_PROJECT_NAME.innerHTML, false);
+			// sends JSON update to AutoTools 
+			sendATUpdate("edited", DIALOG.TAG.INPUT.value, dialogTagType, TAB_BAR_PROJECT_NAME.innerHTML, true)
+			// if deleting a tag on a card
+		} else if (btn_text == "DELETE" && DIALOG.TAG.INPUT.value != "") {
+			// get index of project
+			let projIndex = PROJECTS.findIndex(p => p.name == TAB_BAR_PROJECT_NAME.innerHTML)
+			// get index of tagStructure
+			let tsIndex = PROJECTS[projIndex].tagStructure.findIndex(ts => ts.type == cardName)
+			// get index of tag
+			let tagIndex = PROJECTS[projIndex].tagStructure[tsIndex].tags.findIndex(t => t == DIALOG.TAG.INPUT.value)
+			// remove tag
+			PROJECTS[projIndex].tagStructure[tsIndex].tags.splice(tagIndex, 1)
+			// redraws changes to card
+			fillCardWithCheckBoxes(card, cardName, TAB_BAR_PROJECT_NAME.innerHTML, false);
+			// sends JSON update to AutoTools 
+			sendATUpdate("deleted", DIALOG.TAG.INPUT.value, dialogTagType, TAB_BAR_PROJECT_NAME.innerHTML, true)
+		};
+		// close and clear dialog
+		DIALOG.TAG.DIA.close();
+		DIALOG.TAG.INPUT.value = '';
+		DIALOG.TAG.LABEL.parentElement.classList.remove("is-dirty");
+		DIALOG.TAG.INPUT.removeAttribute('disabled');
+	};
+	/**
+		* opens dialog to change project
+		* 
+		*/
+	function openProjectDialog(btnName) {
+		// 	// prepare dialog and show
+		if (btnName == "changeProject") {
+			// removes current children
+			while (DIALOG.PROJECT.CHANGE.CONTENT.hasChildNodes()) {
+				DIALOG.PROJECT.CHANGE.CONTENT.removeChild(DIALOG.PROJECT.CHANGE.CONTENT.firstChild);
+			};
+			// get and add projects by name as radio buttons
+			let projectNames = PROJECTS.map(t => t.name);
+			projectNames.forEach(name => {
+				// text node
+				let text_tag = document.createTextNode(name);
+				// span node
+				let span = document.createElement("span");
+				span.className = "mdl-radio__label";
+				span.appendChild(text_tag);
+				componentHandler.upgradeElement(span);
+				// input node
+				let input = document.createElement("input");
+				input.setAttribute("type", "radio");
+				input.className = "mdl-radio__button";
+				input.setAttribute("name", "projectNames");
+				if (name == TAB_BAR_PROJECT_NAME.innerHTML) {
+					input.setAttribute("checked", true)
+				}
+				input.id = name;
+				componentHandler.upgradeElement(input);
+				// label node
+				let label = document.createElement("label");
+				label.className = "fit-width mdl-radio mdl-js-radio mdl-js-ripple-effect";
+				label.setAttribute("for", name);
+				label.appendChild(input);
+				label.appendChild(span);
+				componentHandler.upgradeElement(label);
+				DIALOG.PROJECT.CHANGE.CONTENT.appendChild(label);
+				// adds check boxes with linebreak between to card
+				DIALOG.PROJECT.CHANGE.CONTENT.appendChild(document.createElement("br"))
+			})
+			// prepare dialog
+			DIALOG.PROJECT.CHANGE.TITLE.innerText = "CURRENT PROJECTS:";
+			DIALOG.PROJECT.CHANGE.BTN_RIGHT.innerText = "CHANGE";
+			DIALOG.PROJECT.CHANGE.DIA.showModal();
+		} else if (btnName == "addProject") {
+			// prepare dialog
+			DIALOG.PROJECT.ADD_EDIT_DEL.TITLE.innerText = "NEW PROJECT:";
+			DIALOG.PROJECT.ADD_EDIT_DEL.BTN_RIGHT.innerText = "ADD";
+			DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.value = "";
+			DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.removeAttribute('disabled');
+			DIALOG.PROJECT.ADD_EDIT_DEL.DIA.showModal();
+		} else if (btnName == "editProject") {
+			console.log('edit project')
+			// prepare dialog
+			DIALOG.PROJECT.ADD_EDIT_DEL.TITLE.innerText = "EDIT PROJECT NAME:";
+			DIALOG.PROJECT.ADD_EDIT_DEL.BTN_RIGHT.innerText = "EDIT";
+			DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.removeAttribute('disabled');
+			DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.value = TAB_BAR_PROJECT_NAME.innerHTML;
+			DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.parentElement.classList.add("is-dirty");
+			DIALOG.PROJECT.ADD_EDIT_DEL.DIA.showModal();
+		} else if (btnName == "deleteProject") {
+			// prepare dialog
+			DIALOG.PROJECT.ADD_EDIT_DEL.TITLE.innerText = "Delete Project?";
+			DIALOG.PROJECT.ADD_EDIT_DEL.BTN_RIGHT.innerText = "DELETE";
+			DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.value = TAB_BAR_PROJECT_NAME.innerHTML;
+			DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.parentElement.classList.add("is-dirty");
+			DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.setAttribute('disabled', true);
+			DIALOG.PROJECT.ADD_EDIT_DEL.DIA.showModal();
+		}
+	}
+	/**
+		* performs dialog project actions (cancel/???/???) tag
+		* 
+		* @param {string} btn_text - right button for dialog
+		*/
+	function dialogProjectAction(btn_text, dialogID) {
+		let refDialog = document.getElementById(dialogID)
+		if (btn_text == "CANCEL") {
+			// close dialog
+			refDialog.close();
+		} else if (btn_text == "CHANGE") {
+			// finds selected radio button
+			let allRadioBtns = document.querySelectorAll('input[type=radio]');
+			let selectedRadioBtn = Array.from(allRadioBtns).find(rbtn => rbtn.checked == true)
+			TAB_BAR_PROJECT_NAME.innerHTML = selectedRadioBtn.id
+			// close dialog
+			refDialog.close();
+			// change tags accordingly
+			init(selectedRadioBtn.id);
+		} else if (btn_text == "ADD") {
+			if (DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.value != null) {
+				let newProj = skeletonProject
+				newProj.name = DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.value
+				PROJECTS.push(newProj)
+				// close dialog
+				refDialog.close();
+				DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.value = ""
+				// sends JSON update to AutoTools
+				sendATUpdate("added", "", "", newProj.name, false)
+				// show new project on main screen
+				init(newProj.name)
+			}
+		} else if (btn_text == "EDIT") {
+			// get index of project
+			let projIndex = PROJECTS.findIndex(p => p.name == TAB_BAR_PROJECT_NAME.innerHTML)
+			// change name of project
+			PROJECTS[projIndex].name = DIALOG.PROJECT.ADD_EDIT_DEL.INPUT.value
+			// close dialog
+			refDialog.close();
+			// sends JSON update to AutoTools
+			sendATUpdate("edited", "", "", PROJECTS[projIndex].name, false)
+			// refresh project on main screen with new name
+			init(PROJECTS[projIndex].name)
+		} else if (btn_text == "DELETE") {
+			// get index of project to delete
+			let projIndex = PROJECTS.findIndex(p => p.name == TAB_BAR_PROJECT_NAME.innerHTML)
+			// remove project from array
+			PROJECTS.splice(projIndex, 1)
+			// close dialog
+			refDialog.close();
+			// sends JSON update to AutoTools
+			sendATUpdate("deleted", "", "", TAB_BAR_PROJECT_NAME.innerHTML, false)
+			// show first project on main screen
+			init(PROJECTS[0].name)
+		}
+	}
+	/**
+		* sends AutoApps Command with Metadata tag info
+		*/
+	function confirmTags() {
+		// create array to send
+		let metadataTags = [TAB_BAR_PROJECT_NAME.innerHTML];
+		// get all checked inputs
+		let chkd = document.querySelectorAll('input[type=checkbox]:checked');
+		// create array of all check 
+		chkd.forEach(t => metadataTags.push(t.nextElementSibling.innerText))
+		// sends metadata Tags 
+		console.log('confirm=:=' + metadataTags);
+		// AutoTools.sendCommand('confirm=:=' + metadataTags, COMMAND_PREFIX);
+		console.debug('added tags: \"' + metadataTags + '\" to photo');
+	};
+	/**
+		* sends AutoTools Command to device for Tag Updates
+		* 
+		* @param {string} tagAction - added, edited, or deleted
+		* @param {string} diaInputVal - input text from dialog
+		* @param {string} dialogTagType - tag type
+		* @param {string} projName - project name
+		* @param {boolean} isTagUpdate - true if updating tag, otherwise, project only update
+		*/
+	function sendATUpdate(action, diaInputVal, dialogTagType, projName, isTagUpdate) {
+		// update json 
+		let updated_PHOTO_METADATA_PROJECTS = {
+			"PHOTO_METADATA_PROJECTS": PROJECTS
+		};
+		// send commands
+		console.log('update=:=' + JSON.stringify(updated_PHOTO_METADATA_PROJECTS));
+		// AutoTools.sendCommand('update=:=' + JSON.stringify(updated_PHOTO_METADATA_PROJECTS), COMMAND_PREFIX);
+		if (isTagUpdate) {
+			// if updating a tag
+			console.debug(`${action} tag: "${diaInputVal}" to/from: "${dialogTagType}" of project: "${projName}"`);
+		} else {
+			// if updating a project
+			console.debug(`${action} project: "${projName}"`);
+		}
+	};
+	/**
+		* converts spaces to underscores
+		* 
+		* @param {string} text - text to transform
+		*/
+	function transformTextHumanToCode(text) {
+		return text.replace(/ /g, "_");;
+	};
+	/**
+		* parses text after last "-"
+		* converts underscores to spaces
+		* converts to lowercase
+		* 
+		* @param {string} text - text to transform
+		*/
+	function transformTextCodePCToHuman(text) {
+		return text.replace(/.+-/g, "").replace(/_/g, " ").toLowerCase();
+	};
+	/**
+		* capitalizes first letter of string
+		* 
+		* @param {string} string - text to capitalize
+		*/
+	function capitalizeFirstLetter(string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	};
+</script>
